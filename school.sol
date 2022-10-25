@@ -106,8 +106,8 @@ contract School is Ownable {
 
     //when a student pays fee this function divides the fee between entities
     function divideFee(Course storage _course) private {
-        qtknContract.transfer(owner(),  _course.price * baseTerm / 100 ;
-        qtknContract.transfer(_course.assignedTeacher,  _course.price * sharingTerm / 100 ;
+        qtknContract.transfer(owner(),  _course.price * baseTerm / 100) ;
+        qtknContract.transfer(_course.assignedTeacher,  _course.price * sharingTerm / 100) ;
     }
 
     //functions for students
