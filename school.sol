@@ -117,7 +117,7 @@ contract School is Ownable {
         require(qtknContract.balanceOf(msg.sender) >= courses[_courseIndex].price);
         Course storage c = courses[_courseIndex];
         c.students[msg.sender] = status.ENROLLED;
-        qtknContract.transfer(address(this), courses[_courseIndex].price);
+        qtknContract.transferFrom(msg.sender, address(this), courses[_courseIndex].price);
         divideFee(c);
     }
 
