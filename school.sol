@@ -88,7 +88,7 @@ contract School is Ownable {
     //private functions
 
     function calculatePrice(Course storage _course) private view returns (uint) {
-        return (_course.basePrice * _course.sharePrice * (tax/100));
+        return _course.basePrice * _course.sharePrice * tax/100;
     }
 
     //calculate share price
@@ -101,13 +101,13 @@ contract School is Ownable {
         } else {
             st = baseTerm;
         }
-        return (_course.basePrice * (st / 100));
+        return _course.basePrice * st / 100;
     }
 
     //when a student pays fee this function divides the fee between entities
     function divideFee(Course storage _course) private {
-        qtknContract.transfer(owner(),  _course.price * (baseTerm / 100 ));
-        qtknContract.transfer(_course.assignedTeacher,  _course.price * (sharingTerm / 100 ));
+        qtknContract.transfer(owner(),  _course.price * baseTerm / 100 ;
+        qtknContract.transfer(_course.assignedTeacher,  _course.price * sharingTerm / 100 ;
     }
 
     //functions for students
