@@ -39,8 +39,8 @@ contract School is Ownable {
 
     event newCourse (string indexed name, uint indexed index);
 
-    constructor(Certificate _certificateContract, tokenQTKN _qtknContract ) {
-        certificateContract = _certificateContract;
+    constructor(tokenQTKN _qtknContract ) {
+        certificateContract = new Certificate();
         qtknContract = _qtknContract;
     }
 
