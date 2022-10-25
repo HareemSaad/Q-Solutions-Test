@@ -5,6 +5,7 @@ pragma solidity >=0.7.0 <0.9.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./certificate.sol";
+import "./qtkn.sol";
 
 contract School is Ownable {
     //important
@@ -15,6 +16,7 @@ contract School is Ownable {
     uint256 baseTerm = 0;
     uint256 sharingTerm = 0;
     Certificate public certificateContract; //pointer to nft contract
+    tokenQTKN public qtknContract; //pointer to nft contract
 
     struct Course {
         string name;
@@ -37,8 +39,9 @@ contract School is Ownable {
 
     event newCourse (string indexed name, uint indexed index);
 
-    constructor(Certificate _certificateContract) {
+    constructor(Certificate _certificateContract, tokenQTKN _qtknContract ) {
         certificateContract = _certificateContract;
+        qtknContract = _qtknContract;
     }
 
     //functions for owner
@@ -103,19 +106,18 @@ contract School is Ownable {
 
     //when a student pays fee this function divides the fee between entities
     function divideFee(Course storage _course) private {
-        (bool success, ) = owner().call{value: _course.price * (baseTerm / 100 )}('');
-        require(success);
-        (bool success1, ) = _course.assignedTeacher.call{value: _course.price * (sharingTerm / 100 )}('');
-        require(success1);
+        qtknContract.transfer(owner(),  _course.price * (baseTerm / 100 ));
+        qtknContract.transfer(_course.assignedTeacher,  _course.price * (sharingTerm / 100 ));
     }
 
     //functions for students
 
-    function enroll(uint _courseIndex) public payable {
+    function enroll(uint _courseIndex) public {
         require(msg.sender == address(0));
-        require(msg.value == courses[_courseIndex].price);
+        require(qtknContract.balanceOf(msg.sender) >= courses[_courseIndex].price);
         Course storage c = courses[_courseIndex];
         c.students[msg.sender] = status.ENROLLED;
+        qtknContract.transfer(address(this), courses[_courseIndex].price);
         divideFee(c);
     }
 
