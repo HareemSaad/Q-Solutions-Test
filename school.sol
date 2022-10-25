@@ -79,7 +79,7 @@ contract School is Ownable {
 
     //once a student completes the course the teacher van graduate him
     //once the stutus is complete an nft is transfered to him
-    function graduate(uint _courseIndex, address _student) public onlyTeacher onlyOwner {
+    function graduate(uint _courseIndex, address _student) public onlyTeacher {
         require(courses[_courseIndex].students[_student] == status.ENROLLED, "student not enrolled");
         courses[_courseIndex].students[_student] = status.COMPLETED;
         certificateContract.mint(_student);
